@@ -2,7 +2,7 @@ import "./profile.scss"
 
 const Profile = () => {
     return(
-        <div className = "profile">Home</div>
+        <div className = "profile">Profile</div>
     )
 }
 
