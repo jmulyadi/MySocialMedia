@@ -6,11 +6,13 @@
     justify-content: space-between;
     padding: 10px 20px;
     height: 50px;
-    border-bottom: 1px solid themed('border');
+    border-bottom: 1px solid themed("border");
     position: sticky;
     top: 0;
     background-color: themed("bg");
     color: themed("textColor");
+    //which stuff is on tops
+    z-index: 999;
     .left {
       display: flex;
       align-items: center;
@@ -18,20 +20,24 @@
       span {
         font-weight: bold;
         font-style: 20px;
-        color: themed('logo');
+        color: themed("logo");
+        font-family: Georgia, "Times New Roman", Times, serif;
       }
       .search {
         display: flex;
         align-items: center;
         gap: 10px;
-        border: 1px solid themed('border');
+        border: 1px solid themed("border");
         border-radius: 5px;
         padding: 5px;
         input {
           border: none;
           width: 500px;
           background-color: transparent;
-          color: themed("textColor")
+          color: themed("textColor");
+          @include mobile {
+            display: none;
+          }
         }
       }
     }
@@ -39,6 +45,9 @@
       display: flex;
       align-items: center;
       gap: 20px;
+      @include mobile {
+        display: none;
+      }
       .user {
         display: flex;
         align-items: center;
