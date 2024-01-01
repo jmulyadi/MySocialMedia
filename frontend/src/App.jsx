@@ -16,23 +16,28 @@ import "./style.scss";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
 // npm i axios for api calls
+import { QueryClient, QueryClientProvider } from "react-query";
+
 function App() {
-  const {currentUser} = useContext(AuthContext);
-  
-  const {darkMode} = useContext(DarkModeContext);
-  
+  const { currentUser } = useContext(AuthContext);
+
+  const { darkMode } = useContext(DarkModeContext);
+  const queryClient = new QueryClient()
+
   const Layout = () => {
     return (
-      <div className= {darkMode ? 'theme-dark' : 'theme-light'}>
-        <Navbar />
-        <div style={{ display: "flex" }}>
-          <LeftBar />
-          <div style={{ flex: 6 }}>
-            <Outlet />
+      <QueryClientProvider client={queryClient}>
+        <div className={darkMode ? "theme-dark" : "theme-light"}>
+          <Navbar />
+          <div style={{ display: "flex" }}>
+            <LeftBar />
+            <div style={{ flex: 6 }}>
+              <Outlet />
+            </div>
+            <RightBar />
           </div>
-          <RightBar />
         </div>
-      </div>
+      </QueryClientProvider>
     );
   };
   const ProtectedRoute = ({ children }) => {
