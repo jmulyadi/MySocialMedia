@@ -15,7 +15,7 @@ import Profile from "./pages/profile/Profile";
 import "./style.scss";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
-
+// npm i axios for api calls
 function App() {
   const {currentUser} = useContext(AuthContext);
   
