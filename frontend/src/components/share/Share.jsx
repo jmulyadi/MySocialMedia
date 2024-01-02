@@ -4,24 +4,53 @@ import Map from "../../assets/map.png";
 import Friend from "../../assets/friend.png";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
+import { useMutation, useQueryClient } from "react-query";
+import { makeRequest } from "../../axios";
+import { useState } from "react";
 
 const Share = () => {
+  const [file, setFile] = useState(null);
+  const [desc, setDesc] = useState("");
+  //react query makes it so I can add and refetch data quickly
+  const queryClient = useQueryClient();
 
-  const {currentUser} = useContext(AuthContext)
+  const mutation = useMutation(
+    (newPost) => {
+      return makeRequest.post("/posts", newPost);
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries("posts");
+      },
+    }
+  );
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    mutation.mutate({desc})
+  };
+  const { currentUser } = useContext(AuthContext);
   return (
     <div className="share">
       <div className="container">
         <div className="top">
-          <img
-            src={currentUser.profilePic}
-            alt=""
+          <img src={currentUser.profilePic} alt="" />
+          <input
+            type="text"
+            placeholder={`What's on your mind ${currentUser.name}?`}
+            onChange={(e) => setDesc(e.target.value)}
           />
-          <input type="text" placeholder={`What's on your mind ${currentUser.name}?`} />
         </div>
         <hr />
         <div className="bottom">
           <div className="left">
-            <input type="file" id="file" style={{display:"none"}} />
+            <input
+              type="file"
+              id="file"
+              style={{ display: "none" }}
+              onChange={(e) => setDesc(e.target.files[0])}
+            />
             <label htmlFor="file">
               <div className="item">
                 <img src={Image} alt="" />
@@ -38,7 +67,7 @@ const Share = () => {
             </div>
           </div>
           <div className="right">
-            <button>Share</button>
+            <button onClick={handleClick}>Share</button>
           </div>
         </div>
       </div>
