@@ -47,17 +47,25 @@ const Update = ({ setOpenUpdate, user }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-    
-    let coverUrl;
-    let profileUrl;
-    coverUrl = cover ? await upload(cover) : user.profilePic;
-    profileUrl = profile ? await upload(profile) : user.coverPic;
-    
-    mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
-    setOpenUpdate(false);
-    setCover(null);
-    setProfile(null);
-  }
+  
+    try {
+      let [coverUrl, profileUrl] = await Promise.all([
+        cover ? upload(cover) : user.coverPic,
+        profile ? upload(profile) : user.profilePic,
+      ]);
+  
+      // Ensure both coverUrl and profileUrl are available before proceeding with mutation
+      if (coverUrl !== undefined && profileUrl !== undefined) {
+        mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
+        setOpenUpdate(false);
+        setCover(null);
+        setProfile(null);
+      }
+    } catch (error) {
+      console.error("Error during image upload:", error);
+      // Handle error appropriately (show message, log, etc.)
+    }
+  };
   return (
     <div className="update">
       <div className="wrapper">

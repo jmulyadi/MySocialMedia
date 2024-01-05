@@ -12,7 +12,7 @@ const Share = () => {
   const [file, setFile] = useState(null);
   const [desc, setDesc] = useState("");
   //react query makes it so I can add and refetch data quickly
-  
+
   const upload = async () => {
     try {
       const formData = new FormData();
@@ -23,49 +23,44 @@ const Share = () => {
       console.log(err);
     }
   };
-  
+
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (newPost) => {
       return makeRequest.post("/posts", newPost);
     },
     {
-      onSuccess: (data) => {
-        setDesc("");
-        setFile(null);
+      onSuccess: () => {
         // Invalidate and refetch
-        console.log("Mutation succeeded:", data.config.data);
         queryClient.invalidateQueries(["posts"]);
       },
-      
     }
   );
 
   const handleClick = async (e) => {
     e.preventDefault();
     let imgUrl = "";
-    if (file) {
-      imgUrl = await upload();
-    }
-    
-    mutation.mutate({ desc, img: imgUrl });
-    // setDesc("");
-    // setFile(null);
-    //window.location.reload();
+    if (file) imgUrl = await upload();
 
+    mutation.mutate({ desc, img: imgUrl });
+    setDesc("");
+    setFile(null);
   };
 
   const { currentUser } = useContext(AuthContext);
+  console.log(currentUser)
+
   return (
     <div className="share">
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={currentUser.profilePic} alt="" />
+            <img src={"/upload/" + currentUser.profilePic} alt="" />
             <input
               type="text"
               placeholder={`What's on your mind ${currentUser.name}?`}
-              onChange={(e) => setDesc(e.target.value)} value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              value={desc}
             />
           </div>
           <div className="right">
