@@ -69,7 +69,7 @@ const handleProfile = () =>{
         <BellIcon />
         <div className="user">
           <button ref={userButtonRef} onClick={toggleLogout}>
-            <img src={currentUser.profilePic} alt=""></img>
+            <img src={"/upload/" +currentUser.profilePic} alt=""></img>
             <span>{currentUser.name}</span>
           </button>
           {logout && (

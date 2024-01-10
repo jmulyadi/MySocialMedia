@@ -16,7 +16,7 @@ const Update = ({ setOpenUpdate, user }) => {
   });
 
   const upload = async (file) => {
-    console.log(file)
+    console.log(file);
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -47,20 +47,32 @@ const Update = ({ setOpenUpdate, user }) => {
 
   const handleClick = async (e) => {
     e.preventDefault();
-  
+
     try {
       let [coverUrl, profileUrl] = await Promise.all([
         cover ? upload(cover) : user.coverPic,
         profile ? upload(profile) : user.profilePic,
       ]);
-  
+
       // Ensure both coverUrl and profileUrl are available before proceeding with mutation
       if (coverUrl !== undefined && profileUrl !== undefined) {
-        mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
+        mutation.mutate({
+          ...texts,
+          coverPic: coverUrl,
+          profilePic: profileUrl,
+        });
         setOpenUpdate(false);
         setCover(null);
         setProfile(null);
       }
+
+      // Update local storage after a successful mutation
+      const updatedUser = {
+        ...user,
+        coverPic: coverUrl,
+        profilePic: profileUrl,
+      };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
     } catch (error) {
       console.error("Error during image upload:", error);
       // Handle error appropriately (show message, log, etc.)
