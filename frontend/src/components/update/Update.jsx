@@ -73,6 +73,8 @@ const Update = ({ setOpenUpdate, user }) => {
         profilePic: profileUrl,
       };
       localStorage.setItem("user", JSON.stringify(updatedUser));
+      location.reload();
+
     } catch (error) {
       console.error("Error during image upload:", error);
       // Handle error appropriately (show message, log, etc.)

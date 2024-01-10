@@ -56,7 +56,7 @@ const Profile = () => {
   const handleFollow = () => {
     mutation.mutate(relationshipData.includes(currentUser.id));
   };
-
+  const temp = JSON.parse(localStorage.getItem("user"))
   return (
     <div className="profile">
       {isLoading ? (
